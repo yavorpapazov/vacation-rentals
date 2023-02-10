@@ -1,14 +1,11 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 function App() {
   let [count, setCount] = useState(0)
-  function handleCount() {
-    setCount(prevState => prevState + 1)
-  }
+  
   return (
     <div>
-      <button onClick={handleCount}>Count</button>
-      <h1>{count}</h1>
+      <h3>{count}</h3>
     </div>
   )
 }
