@@ -1,0 +1,9 @@
+.name-input {
+    border: 3px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+}
+.invalid {
+    border: 3px solid gray;
+    background-color: lightpink;
+}
