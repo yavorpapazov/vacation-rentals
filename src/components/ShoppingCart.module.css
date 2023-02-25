@@ -1,0 +1,7 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 300px;
+    grid-auto-rows: auto;
+    justify-content: center;
+    gap: 30px;
+}
