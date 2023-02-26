@@ -1,8 +1,8 @@
 import classes from "./App.module.css"
 import { useState, useEffect } from "react"
-import { db } from "./firebase/firebase-config"
+import { db, storage } from "./firebase/firebase-config"
 import { collection, onSnapshot, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore"
-import bnbData from "./data/bnbs.json"
+import { ref, deleteObject } from "firebase/storage"
 import VacationRental from "./components/VacationRental"
 import ShoppingCart from "./components/ShoppingCart"
 import Form from "./components/Form"
@@ -10,7 +10,7 @@ import Button from "./ui/Button"
 
 function App() {
   let [cart, setCart] = useState([])
-  let [bnbs, setBnbs] = useState(bnbData)
+  let [bnbs, setBnbs] = useState([])
   let [isShoppingCartDisplayed, setIsShoppingCartDisplayed] = useState(false)
   async function handleAddToCart(bnbId) {
     let addDocRef = doc(db, "bnbs", bnbId)
@@ -30,12 +30,25 @@ function App() {
   function handleCloseCart() {
     setIsShoppingCartDisplayed(false)
   }
+  async function handleDelete(docId) {
+    let addCartDocRef = doc(db, "cart", docId)
+    let addCartDocSnap = await getDoc(addCartDocRef)
+    if(addCartDocSnap.exists()) {
+      alert('Please remove item from shopping cart.')
+      return
+    }
+    let deleteDocRef = doc(db, "bnbs", docId)
+    let docSnap = await getDoc(deleteDocRef)
+    await deleteDoc(deleteDocRef)
+    let deleteImageRef = ref(storage, docSnap.data().fullPath)
+    deleteObject(deleteImageRef)
+  }
   useEffect(() => {
     let bnbsCollectionRef = collection(db, "bnbs")
     let getBnbs = async () => {
       onSnapshot(bnbsCollectionRef, snapshot => {
         let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
-        setBnbs([...bnbData, ...result])
+        setBnbs(result)
       })
     }
     getBnbs()
@@ -45,19 +58,26 @@ function App() {
     let getCart = async () => {
       onSnapshot(cartCollectionRef, snapshot => {
         let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
-        setCart([...result])
+        setCart(result)
       })
     }
     getCart()
   }, [])
-  let resultVacationRental = bnbs.map(item => <VacationRental key={item.id} bnb={item} manageCart={handleAddToCart} action="Add to Cart" />)
+  let resultVacationRental = bnbs.map(item => <VacationRental 
+    key={item.id} 
+    bnb={item} 
+    manageCart={handleAddToCart} 
+    deleteBnb={handleDelete} 
+    action="Add to Cart" 
+    showDelete={true}
+  />)
   return (
     <div className={classes.container}>
       {isShoppingCartDisplayed && <div className={classes.backdrop} />}
       <Form />
       <div>
         <h3 className={classes["shopping-cart-h3"]}>Shopping cart items: {cart.length}</h3>
-        <Button onClick={() => setIsShoppingCartDisplayed(true)}>Shopping Cart</Button>
+        <Button addClass="button" onClick={() => setIsShoppingCartDisplayed(true)}>Shopping Cart</Button>
       </div>
       <div className={classes["grid-container"]}>
         {resultVacationRental}

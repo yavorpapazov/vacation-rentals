@@ -9,3 +9,14 @@
     background-color: darkgray;
     color: whitesmoke;
 }
+.delete {
+    border-radius: 5px;
+    width: 50px;
+    height: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.delete:hover {
+    background-color: darkgray;
+    color: whitesmoke;
+}

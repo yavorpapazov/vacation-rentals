@@ -5,7 +5,13 @@ import PropTypes from "prop-types"
 
 function ShoppingCart({bnbCart, manageCart, closeCart}) {
   let total = 0
-  let resultShoppingCartItems = bnbCart.map(item => <VacationRental key={item.id} bnb={item} manageCart={manageCart} action="Remove" />)
+  let resultShoppingCartItems = bnbCart.map(item => <VacationRental 
+    key={item.id} 
+    bnb={item} 
+    manageCart={manageCart} 
+    action="Remove"
+    showDelete={false}
+  />)
   for(let i of bnbCart) {
     total = total + i.bnbCost
   }
@@ -14,7 +20,7 @@ function ShoppingCart({bnbCart, manageCart, closeCart}) {
       {resultShoppingCartItems}
       <h3>Total: ${total}</h3>
       <div>
-        <Button onClick={closeCart}>Close</Button>
+        <Button addClass="button" onClick={closeCart}>Close</Button>
       </div>
     </div>
   )

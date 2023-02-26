@@ -83,7 +83,7 @@ function Form() {
         <input id="picture" type="file" value={image} onChange={handleImage} required></input>
       </div>
       <div className={classes["form-item-button"]}>
-        <Button>Save</Button>
+        <Button addClass="button">Save</Button>
       </div>
     </form>
   )

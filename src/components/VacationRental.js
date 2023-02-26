@@ -1,9 +1,9 @@
 import classes from "./VacationRental.module.css"
-import { AiFillStar } from "react-icons/ai"
+import { AiFillStar, AiFillDelete } from "react-icons/ai"
 import Button from "../ui/Button"
 import PropTypes from "prop-types"
 
-function VacationRental({bnb, manageCart, action}) {
+function VacationRental({bnb, manageCart, action, deleteBnb, showDelete}) {
   return (
     <div className={classes.container}>
       <div className={classes["image-div"]}>
@@ -17,8 +17,12 @@ function VacationRental({bnb, manageCart, action}) {
       <div className={classes.cost}>
         <h3>Cost: ${bnb.bnbCost}</h3>
         <div>
-          <Button onClick={() => manageCart(bnb.id)}>{action}</Button>
+          <Button addClass="button" onClick={() => manageCart(bnb.id)}>{action}</Button>
         </div>
+        {showDelete &&
+        <div>
+          <Button addClass="delete" onClick={() => deleteBnb(bnb.id)}><AiFillDelete /></Button>
+        </div>}
       </div>
     </div>
   )
@@ -27,7 +31,8 @@ function VacationRental({bnb, manageCart, action}) {
 VacationRental.propTypes = {
   bnb: PropTypes.object.isRequired,
   manageCart: PropTypes.func.isRequired,
-  action: PropTypes.string.isRequired
+  action: PropTypes.string.isRequired,
+  showDelete: PropTypes.bool.isRequired
 }
 
 export default VacationRental
