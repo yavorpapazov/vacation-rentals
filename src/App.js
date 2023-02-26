@@ -1,47 +1,35 @@
 import classes from "./App.module.css"
 import { useState, useEffect } from "react"
 import { db } from "./firebase/firebase-config"
-import { collection, onSnapshot, doc, getDoc, addDoc } from "firebase/firestore"
+import { collection, onSnapshot, doc, getDoc, setDoc, deleteDoc } from "firebase/firestore"
 import bnbData from "./data/bnbs.json"
 import VacationRental from "./components/VacationRental"
-//import ShoppingCart from "./components/ShoppingCart"
+import ShoppingCart from "./components/ShoppingCart"
 import Form from "./components/Form"
-//import Button from "./ui/Button"
+import Button from "./ui/Button"
 
 function App() {
   let [cart, setCart] = useState([])
   let [bnbs, setBnbs] = useState(bnbData)
-  //let [isShoppingCartDisplayed, setIsShoppingCartDisplayed] = useState(false)
-  function handleUserInput(userData) {
-    setBnbs(prevState => [...prevState, userData])
-  }
+  let [isShoppingCartDisplayed, setIsShoppingCartDisplayed] = useState(false)
   async function handleAddToCart(bnbId) {
-    console.log(bnbId)
     let addDocRef = doc(db, "bnbs", bnbId)
     let docSnap = await getDoc(addDocRef)
-    let cartDocRef = doc(db, "cart", bnbId)
-    let cartDocSnap = await getDoc(cartDocRef)
-    if(cartDocSnap.exists()) {
+    let addCartDocRef = doc(db, "cart", bnbId)
+    let addCartDocSnap = await getDoc(addCartDocRef)
+    if(addCartDocSnap.exists()) {
       alert('The item is already in the cart.')
       return
     }
-    console.log(docSnap.data())
-    await addDoc(collection(db, "cart"), docSnap.data())
-  //   let itemToAdd = bnbs.find(item => item.id === bnbId)
-  //   let alreadyExist = cart.some(item => item.id === itemToAdd.id)
-  //   if(alreadyExist) {
-  //     alert('The item is already in the cart.')
-  //     return
-  //   }
-  //   setCart(prevState => [...prevState, itemToAdd])
+    await setDoc(doc(db, "cart", bnbId), docSnap.data())
   }
-  // function handleRemoveFromCart(bnbId) {
-  //   let newArr = cart.filter(item => item.id !== bnbId)
-  //   setCart(newArr)
-  // }
-  // function handleCloseCart() {
-  //   setIsShoppingCartDisplayed(false)
-  //}
+  async function handleRemoveFromCart(bnbId) {
+    let deleteCartDocRef = doc(db, "cart", bnbId)
+    await deleteDoc(deleteCartDocRef)
+  }
+  function handleCloseCart() {
+    setIsShoppingCartDisplayed(false)
+  }
   useEffect(() => {
     let bnbsCollectionRef = collection(db, "bnbs")
     let getBnbs = async () => {
@@ -52,23 +40,32 @@ function App() {
     }
     getBnbs()
   }, [])
-  console.log(bnbs)
+  useEffect(() => {
+    let cartCollectionRef = collection(db, "cart")
+    let getCart = async () => {
+      onSnapshot(cartCollectionRef, snapshot => {
+        let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
+        setCart([...result])
+      })
+    }
+    getCart()
+  }, [])
   let resultVacationRental = bnbs.map(item => <VacationRental key={item.id} bnb={item} manageCart={handleAddToCart} action="Add to Cart" />)
   return (
     <div className={classes.container}>
-      {/* isShoppingCartDisplayed && <div className={classes.backdrop} /> */}
+      {isShoppingCartDisplayed && <div className={classes.backdrop} />}
       <Form />
-      {/* <div>
+      <div>
         <h3 className={classes["shopping-cart-h3"]}>Shopping cart items: {cart.length}</h3>
         <Button onClick={() => setIsShoppingCartDisplayed(true)}>Shopping Cart</Button>
-      </div> */}
+      </div>
       <div className={classes["grid-container"]}>
         {resultVacationRental}
       </div>
-      {/* isShoppingCartDisplayed && 
+      {isShoppingCartDisplayed && 
       <div className={classes.modal}>
         <ShoppingCart bnbCart={cart} manageCart={handleRemoveFromCart} closeCart={handleCloseCart} />
-      </div> */}
+      </div>}
     </div>
   );
 }
