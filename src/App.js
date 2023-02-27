@@ -46,10 +46,14 @@ function App() {
   useEffect(() => {
     let bnbsCollectionRef = collection(db, "bnbs")
     let getBnbs = async () => {
-      onSnapshot(bnbsCollectionRef, snapshot => {
-        let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
-        setBnbs(result)
-      })
+      try {
+        onSnapshot(bnbsCollectionRef, snapshot => {
+          let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
+          setBnbs(result)
+        })
+      } catch(err) {
+        console.error(err)
+      }
     }
     getBnbs()
   }, [])

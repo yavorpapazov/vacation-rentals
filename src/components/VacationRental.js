@@ -16,13 +16,15 @@ function VacationRental({bnb, manageCart, action, deleteBnb, showDelete}) {
       <h3>{bnb.bnbTitle}</h3>
       <div className={classes.cost}>
         <h3>Cost: ${bnb.bnbCost}</h3>
-        <div>
-          <Button addClass="button" onClick={() => manageCart(bnb.id)}>{action}</Button>
+        <div className={classes["add-delete-buttons"]}>
+          <div>
+            <Button addClass="button" onClick={() => manageCart(bnb.id)}>{action}</Button>
+          </div>
+          {showDelete &&
+          <div>
+            <Button addClass="delete" onClick={() => deleteBnb(bnb.id)}><AiFillDelete /></Button>
+          </div>}
         </div>
-        {showDelete &&
-        <div>
-          <Button addClass="delete" onClick={() => deleteBnb(bnb.id)}><AiFillDelete /></Button>
-        </div>}
       </div>
     </div>
   )

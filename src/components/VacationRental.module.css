@@ -27,3 +27,7 @@
     justify-content: space-between;
     padding: 5px 0;
 }
+.add-delete-buttons {
+    display: flex;
+    gap: 10px;
+}
