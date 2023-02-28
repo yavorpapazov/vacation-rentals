@@ -1,0 +1,9 @@
+.header {
+    width: 95%;
+    margin: 0 auto 10px;
+}
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+}

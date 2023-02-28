@@ -1,17 +1,10 @@
 .btn {
-    border: 3px solid maroon;
-    border-radius: 10px;
-    background-color: maroon;
-    color: whitesmoke;
+    color: maroon;
     font-weight: bold;
+    font-size: 1.5rem;
     text-decoration: none;
-    text-align: center;
-    display: block;
-    width: 200px;
-    padding: 10px;
-    margin: 20px;
+    margin-top: 20px;
 }
 .btn:hover {
-    background-color: whitesmoke;
-    color: maroon;
+    text-decoration: underline;
 }
