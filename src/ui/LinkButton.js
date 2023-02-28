@@ -2,13 +2,14 @@ import classes from "./LinkButton.module.css"
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 
-function LinkButton({to, children}) {
+function LinkButton({addClass, to, children}) {
   return (
-    <Link className={classes.btn} to={to}>{children}</Link>
+    <Link className={`${classes.btn} ${classes[addClass]}`} to={to}>{children}</Link>
   )
 }
 
 LinkButton.propTypes = {
+  addClass: PropTypes.string,
   to: PropTypes.string.isRequired,
   children: PropTypes.string.isRequired
 }

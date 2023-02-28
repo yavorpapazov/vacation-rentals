@@ -9,7 +9,7 @@ function Navigation() {
           <LinkButton to="/">Home</LinkButton>
         </div>
         <div>
-          <LinkButton to="/login">Log In</LinkButton>
+          <LinkButton addClass="border" to="/login">Log In</LinkButton>
         </div>
       </nav>
     </header>
