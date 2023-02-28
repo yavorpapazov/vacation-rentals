@@ -1,4 +1,5 @@
 import classes from "./VacationRental.module.css"
+import { Link } from "react-router-dom"
 import { AiFillStar, AiFillDelete } from "react-icons/ai"
 import Button from "../ui/Button"
 import PropTypes from "prop-types"
@@ -7,7 +8,7 @@ function VacationRental({bnb, manageCart, action, deleteBnb, showDelete}) {
   return (
     <div className={classes.container}>
       <div className={classes["image-div"]}>
-        <img src={bnb.bnbImage} alt={bnb.bnbTitle} />
+        <Link to={`/bnbs/${bnb.id}`}><img src={bnb.bnbImage} alt={bnb.bnbTitle} /></Link>
       </div>
       <div className={classes.location}>
         <h3>{bnb.bnbCity}, {bnb.bnbCountry}</h3>
@@ -34,6 +35,7 @@ VacationRental.propTypes = {
   bnb: PropTypes.object.isRequired,
   manageCart: PropTypes.func.isRequired,
   action: PropTypes.string.isRequired,
+  deleteBnb: PropTypes.func,
   showDelete: PropTypes.bool.isRequired
 }
 

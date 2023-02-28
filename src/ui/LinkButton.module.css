@@ -5,10 +5,10 @@
     text-decoration: none;
     margin-top: 20px;
 }
-.btn:hover {
-    color: black;
-}
 .border {
     border: 1px solid maroon;
     padding: 10px 20px;
+}
+.border:hover {
+    background-color: darkgray;
 }
