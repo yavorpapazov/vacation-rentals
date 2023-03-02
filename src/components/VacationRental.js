@@ -14,7 +14,6 @@ function VacationRental({bnb, manageCart, action, deleteBnb, showDelete}) {
         <h3>{bnb.bnbCity}, {bnb.bnbCountry}</h3>
         <h3><AiFillStar /> {bnb.stars}</h3>
       </div>
-      <h3>{bnb.bnbTitle}</h3>
       <div className={classes.cost}>
         <h3>Cost: ${bnb.bnbCost}</h3>
         <div className={classes["add-delete-buttons"]}>

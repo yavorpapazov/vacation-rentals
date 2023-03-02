@@ -12,16 +12,16 @@ function Navigation() {
         <div>
           <LinkButton to="/">Home</LinkButton>
         </div>
-        <div>
-          <LinkButton addClass="border" to="/login">Log In</LinkButton>
-        </div>
-        <div>
-        <div className={classes["shopping-cart"]}>
-          <div className={classes["shopping-cart-div"]} onClick={() => contextData.handleDisplayCart()}>
-            <AiOutlineShoppingCart size="3em" />
+        <div className={classes["log-in-cart"]}>
+          <div>
+            <LinkButton addClass="border" to="/login">Log In</LinkButton>
           </div>
-          <h3 className={classes["shopping-cart-h3"]}>Items: {contextData.cart.length}</h3>
-      </div>
+          <div className={classes["shopping-cart"]}>
+            <div className={classes["shopping-cart-div"]} onClick={() => contextData.handleDisplayCart()}>
+              <AiOutlineShoppingCart size="3em" />
+            </div>
+            <h3 className={classes["shopping-cart-h3"]}>Items: {contextData.cart.length}</h3>
+          </div>
         </div>
       </nav>
     </header>
