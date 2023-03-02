@@ -1,18 +1,26 @@
 import classes from "./ShoppingCart.module.css"
+import { useContext } from "react"
+import { AppContext } from "../state/context"
+import { db } from "../firebase/firebase-config"
+import { doc, deleteDoc } from "firebase/firestore"
 import VacationRental from "./VacationRental"
 import Button from "../ui/Button"
-import PropTypes from "prop-types"
 
-function ShoppingCart({bnbCart, manageCart, closeCart}) {
+function ShoppingCart() {
+  let contextData = useContext(AppContext)
+  async function handleRemoveFromCart(bnbId) {
+    let deleteCartDocRef = doc(db, "cart", bnbId)
+    await deleteDoc(deleteCartDocRef)
+  }
   let total = 0
-  let resultShoppingCartItems = bnbCart.map(item => <VacationRental 
+  let resultShoppingCartItems = contextData.cart.map(item => <VacationRental 
     key={item.id} 
     bnb={item} 
-    manageCart={manageCart} 
+    manageCart={handleRemoveFromCart} 
     action="Remove"
     showDelete={false}
   />)
-  for(let i of bnbCart) {
+  for(let i of contextData.cart) {
     total = total + i.bnbCost
   }
   return (
@@ -20,16 +28,10 @@ function ShoppingCart({bnbCart, manageCart, closeCart}) {
       {resultShoppingCartItems}
       <h3>Total: ${total}</h3>
       <div>
-        <Button addClass="button" onClick={closeCart}>Close</Button>
+        <Button addClass="button" onClick={contextData.handleCloseCart}>Close</Button>
       </div>
     </div>
   )
-}
-
-ShoppingCart.propTypes = {
-  bnbCart: PropTypes.array.isRequired,
-  manageCart: PropTypes.func.isRequired,
-  closeCart: PropTypes.func.isRequired
 }
 
 export default ShoppingCart
