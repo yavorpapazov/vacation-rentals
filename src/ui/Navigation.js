@@ -17,10 +17,10 @@ function Navigation() {
             <LinkButton addClass="border" to="/login">Log In</LinkButton>
           </div>
           <div className={classes["shopping-cart"]}>
+            <h3 className={classes["shopping-cart-h3"]}>{contextData.cart.length}</h3>
             <div className={classes["shopping-cart-div"]} onClick={() => contextData.handleDisplayCart()}>
-              <AiOutlineShoppingCart size="3em" />
+              <AiOutlineShoppingCart size="2em" />
             </div>
-            <h3 className={classes["shopping-cart-h3"]}>Items: {contextData.cart.length}</h3>
           </div>
         </div>
       </nav>
