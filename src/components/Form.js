@@ -1,6 +1,6 @@
 import classes from "./Form.module.css"
 import { useState } from "react"
-import { db, storage } from "../firebase/firebase-config"
+import { db, storage, auth } from "../firebase/firebase-config"
 import { collection, addDoc } from "firebase/firestore"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import Button from "../ui/Button"
@@ -33,7 +33,8 @@ function Form() {
     if(imageUrl === null) {
       return
     }
-    let imageRef = ref(storage, `images/${title}`)
+    let date = Date.now().toString()
+    let imageRef = ref(storage, `images/${date}`)
     let result = await uploadBytes(imageRef, imageUrl)
     if(result) {
       alert('Image uploaded.')
@@ -46,7 +47,8 @@ function Form() {
       bnbCost: parseInt(cost),
       bnbImage: resultURL,
       fullPath: imageRef.fullPath,
-      stars: 4.5
+      stars: 4.5,
+      userId: auth.currentUser.uid
     }
     await addDoc(collection(db, "bnbs"), userInputObj)
     setTitle('')
