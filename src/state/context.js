@@ -25,6 +25,8 @@ function AppContextProvider({children}) {
     onAuthStateChanged(auth, currentUser => {
       if(currentUser) {
         setUserId(currentUser.uid)
+      } else {
+        setUserId(null)
       }
     })
   }, [])

@@ -1,9 +1,11 @@
 import classes from "./Home.module.css"
-import { useContext } from "react"
+import { useContext, useState, useEffect } from "react"
 import { AppContext } from "../state/context"
-import { db, storage } from "../firebase/firebase-config"
+import { db, storage, auth } from "../firebase/firebase-config"
+import { onAuthStateChanged } from "firebase/auth"
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore"
 import { ref, deleteObject } from "firebase/storage"
+import VacationRentalStatic from "../components/VacationRentalStatic"
 import VacationRental from "../components/VacationRental"
 import ShoppingCart from "../components/ShoppingCart"
 import Form from "../components/Form"
@@ -11,6 +13,16 @@ import bnbStaticData from "../static/bnbs.json"
 
 function Home() {
   let contextData = useContext(AppContext)
+  let [userEmail, setUserEmail] = useState(null)
+  useEffect(() => {
+    onAuthStateChanged(auth, currentUser => {
+      if(currentUser) {
+        setUserEmail(currentUser.email)
+      } else {
+        setUserEmail(null)
+      }
+    })
+  }, [])
   async function handleAddToCart(bnbId) {
     let addDocRef = doc(db, "bnbs", bnbId)
     let docSnap = await getDoc(addDocRef)
@@ -35,8 +47,7 @@ function Home() {
     let deleteImageRef = ref(storage, docSnap.data().fullPath)
     deleteObject(deleteImageRef)
   }
-  console.log(contextData.bnbs)
-  console.log(bnbStaticData)
+  let resultVacationRentalStatic = bnbStaticData.map(item => <VacationRentalStatic key={item.id} bnb={item} />)
   let resultVacationRental = contextData.bnbs.map(item => <VacationRental 
     key={item.id} 
     bnb={item} 
@@ -49,8 +60,9 @@ function Home() {
     <div className={classes.container}>
       {contextData.isShoppingCartDisplayed && <div className={classes.backdrop} />}
       <Form />
+      {userEmail !== null && <h3>User logged in: {userEmail}</h3>}
       <div className={classes["grid-container"]}>
-        {resultVacationRental}
+        {userEmail === null ? resultVacationRentalStatic : resultVacationRental}
       </div>
       {contextData.isShoppingCartDisplayed && 
       <div className={classes.modal}>

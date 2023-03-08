@@ -48,6 +48,7 @@ function Login() {
     }
     setEmail('')
     setPassword('')
+    navigate("/")
   }
   async function handleSigninWithGoogle() {
     try {
@@ -58,11 +59,11 @@ function Login() {
   }
   async function handleLogout() {
     try {
-      await signOut(auth)
-      navigate("/")
+      await signOut(auth) 
     } catch(err) {
       console.log(err.message)
     }
+    navigate("/")
   }
   return (
     <div className={classes.login}>
