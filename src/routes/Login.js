@@ -2,6 +2,7 @@ import classes from "./Login.module.css"
 import { useState, useEffect } from "react"
 import { auth, googleProvider } from "../firebase/firebase-config"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth"
+import { useNavigate } from "react-router-dom"
 import Button from "../ui/Button"
 
 function Login() {
@@ -10,6 +11,7 @@ function Login() {
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
   let [user, setUser] = useState({})
+  let navigate = useNavigate()
   useEffect(() => {
     onAuthStateChanged(auth, currentUser => {
       setUser(currentUser)
@@ -57,6 +59,7 @@ function Login() {
   async function handleLogout() {
     try {
       await signOut(auth)
+      navigate("/")
     } catch(err) {
       console.log(err.message)
     }

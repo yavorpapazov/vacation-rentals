@@ -7,6 +7,7 @@ import { ref, deleteObject } from "firebase/storage"
 import VacationRental from "../components/VacationRental"
 import ShoppingCart from "../components/ShoppingCart"
 import Form from "../components/Form"
+import bnbStaticData from "../static/bnbs.json"
 
 function Home() {
   let contextData = useContext(AppContext)
@@ -34,6 +35,8 @@ function Home() {
     let deleteImageRef = ref(storage, docSnap.data().fullPath)
     deleteObject(deleteImageRef)
   }
+  console.log(contextData.bnbs)
+  console.log(bnbStaticData)
   let resultVacationRental = contextData.bnbs.map(item => <VacationRental 
     key={item.id} 
     bnb={item} 

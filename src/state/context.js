@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext } from "react"
 import { db, auth } from "../firebase/firebase-config"
+import { onAuthStateChanged } from "firebase/auth"
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 
 let AppContext = createContext()
@@ -7,7 +8,7 @@ function AppContextProvider({children}) {
   let [cart, setCart] = useState([])
   let [bnbs, setBnbs] = useState([])
   let [isShoppingCartDisplayed, setIsShoppingCartDisplayed] = useState(false)
-  let [userId, setUserId] = useState('')
+  let [userId, setUserId] = useState(null)
   function handleBnbs(result) {
     setBnbs(result)
   }
@@ -20,10 +21,16 @@ function AppContextProvider({children}) {
   function handleCloseCart() {
     setIsShoppingCartDisplayed(false)
   }
-  console.log(auth?.currentUser?.uid)
+  useEffect(() => {
+    onAuthStateChanged(auth, currentUser => {
+      if(currentUser) {
+        setUserId(currentUser.uid)
+      }
+    })
+  }, [])
   useEffect(() => {
     let bnbsCollectionRef = collection(db, "bnbs")
-    let q = query(bnbsCollectionRef, where("userId", "==", "6bPYmW2hunX4zzPz4sotgh3DrjS2"))
+    let q = query(bnbsCollectionRef, where("userId", "==", userId))
     let getBnbs = async () => {
       try {
         onSnapshot(q, snapshot => {
@@ -35,17 +42,18 @@ function AppContextProvider({children}) {
       }
     }
     getBnbs()
-  }, [])
+  }, [userId])
   useEffect(() => {
     let cartCollectionRef = collection(db, "cart")
+    let q = query(cartCollectionRef, where("userId", "==", userId))
     let getCart = async () => {
-      onSnapshot(cartCollectionRef, snapshot => {
+      onSnapshot(q, snapshot => {
         let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
         setCart(result)
       })
     }
     getCart()
-  }, [])
+  }, [userId])
   let contextValue = {
     isShoppingCartDisplayed,
     handleBnbs,
