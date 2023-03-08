@@ -59,7 +59,7 @@ function Home() {
   return (
     <div className={classes.container}>
       {contextData.isShoppingCartDisplayed && <div className={classes.backdrop} />}
-      <Form />
+      {userEmail !== null && <Form />}
       {userEmail !== null && <h3>User logged in: {userEmail}</h3>}
       <div className={classes["grid-container"]}>
         {userEmail === null ? resultVacationRentalStatic : resultVacationRental}

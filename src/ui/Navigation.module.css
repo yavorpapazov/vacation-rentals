@@ -8,7 +8,7 @@
     padding: 15px 0;
     align-items: center;
 }
-.log-in-cart {
+.auth-cart {
     display: flex;
     align-items: center;
     gap: 50px;

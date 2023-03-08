@@ -24,13 +24,16 @@ function Navigation() {
         <div>
           <LinkButton to="/">Home</LinkButton>
         </div>
-        <div className={classes["log-in-cart"]}>
+        <div className={classes["auth-cart"]}>
           <div>
             <LinkButton addClass="border" to="/login">Log In</LinkButton>
           </div>
+          <div>
+            <LinkButton addClass="border" to="/register">Register</LinkButton>
+          </div>
           <div className={classes["shopping-cart"]}>
             <h3 className={classes["shopping-cart-h3"]}>{userId === null ? 0 : contextData.cart.length}</h3>
-            <div className={classes["shopping-cart-div"]} onClick={() => contextData.handleDisplayCart()}>
+            <div onClick={() => contextData.handleDisplayCart()}>
               <AiOutlineShoppingCart size="2em" />
             </div>
           </div>
