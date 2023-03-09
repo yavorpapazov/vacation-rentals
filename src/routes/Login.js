@@ -1,7 +1,7 @@
 import classes from "./Login.module.css"
 import { useState } from "react"
 import { auth, googleProvider } from "../firebase/firebase-config"
-import { signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth"
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { useNavigate } from "react-router-dom"
 import Button from "../ui/Button"
 
@@ -32,13 +32,6 @@ function Login() {
     } catch(err) {
       console.log(err.message)
     }
-  }
-  async function handleLogout() {
-    try {
-      await signOut(auth) 
-    } catch(err) {
-      console.log(err.message)
-    }
     navigate("/")
   }
   return (
@@ -57,7 +50,6 @@ function Login() {
         <Button addClass="button">Log in</Button>
       </form>
       <Button addClass="button" onClick={handleSigninWithGoogle}>Google</Button>
-      <Button addClass="button" onClick={handleLogout}>Log out</Button>
     </div>
   )
 }

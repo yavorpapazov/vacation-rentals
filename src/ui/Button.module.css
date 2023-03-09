@@ -20,3 +20,16 @@
     background-color: darkgray;
     color: whitesmoke;
 }
+.btn {
+    border: 1px solid maroon;
+    background-color: lightgray;
+    color: maroon;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: darkgray;
+}
