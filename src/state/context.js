@@ -1,14 +1,14 @@
 import { useState, useEffect, createContext } from "react"
-import { db, auth } from "../firebase/firebase-config"
-import { onAuthStateChanged } from "firebase/auth"
-import { collection, query, where, onSnapshot } from "firebase/firestore"
+import { db } from "../firebase/firebase-config"
+//import { onAuthStateChanged } from "firebase/auth"
+import { collection, onSnapshot } from "firebase/firestore"
 
 let AppContext = createContext()
 function AppContextProvider({children}) {
   let [cart, setCart] = useState([])
   let [bnbs, setBnbs] = useState([])
   let [isShoppingCartDisplayed, setIsShoppingCartDisplayed] = useState(false)
-  let [userId, setUserId] = useState(null)
+  //let [userId, setUserId] = useState(null)
   function handleBnbs(result) {
     setBnbs(result)
   }
@@ -21,21 +21,20 @@ function AppContextProvider({children}) {
   function handleCloseCart() {
     setIsShoppingCartDisplayed(false)
   }
-  useEffect(() => {
-    onAuthStateChanged(auth, currentUser => {
-      if(currentUser) {
-        setUserId(currentUser.uid)
-      } else {
-        setUserId(null)
-      }
-    })
-  }, [])
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, currentUser => {
+  //     if(currentUser) {
+  //       setUserId(currentUser.uid)
+  //     } else {
+  //       setUserId(null)
+  //     }
+  //   })
+  // }, [])
   useEffect(() => {
     let bnbsCollectionRef = collection(db, "bnbs")
-    let q = query(bnbsCollectionRef, where("userId", "==", userId))
     let getBnbs = async () => {
       try {
-        onSnapshot(q, snapshot => {
+        onSnapshot(bnbsCollectionRef, snapshot => {
           let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
           setBnbs(result)
         })
@@ -44,18 +43,18 @@ function AppContextProvider({children}) {
       }
     }
     getBnbs()
-  }, [userId])
+  }, [])
   useEffect(() => {
     let cartCollectionRef = collection(db, "cart")
-    let q = query(cartCollectionRef, where("userId", "==", userId))
+    //let q = query(cartCollectionRef, where("userId", "==", userId))
     let getCart = async () => {
-      onSnapshot(q, snapshot => {
+      onSnapshot(cartCollectionRef, snapshot => {
         let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
         setCart(result)
       })
     }
     getCart()
-  }, [userId])
+  }, [])
   let contextValue = {
     isShoppingCartDisplayed,
     handleBnbs,

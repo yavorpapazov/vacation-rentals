@@ -5,11 +5,9 @@ import { db, storage, auth } from "../firebase/firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore"
 import { ref, deleteObject } from "firebase/storage"
-import VacationRentalStatic from "../components/VacationRentalStatic"
 import VacationRental from "../components/VacationRental"
 import ShoppingCart from "../components/ShoppingCart"
 import Form from "../components/Form"
-import bnbStaticData from "../static/bnbs.json"
 
 function Home() {
   let contextData = useContext(AppContext)
@@ -32,7 +30,9 @@ function Home() {
       alert('The item is already in the cart.')
       return
     }
-    await setDoc(doc(db, "cart", bnbId), docSnap.data())
+    console.log(docSnap.data())
+    console.log(auth.currentUser.uid)
+    await setDoc(doc(db, "cart", bnbId), {...docSnap.data(), addedToCartBy: auth.currentUser.uid})
   }
   async function handleDelete(docId) {
     let addCartDocRef = doc(db, "cart", docId)
@@ -47,7 +47,6 @@ function Home() {
     let deleteImageRef = ref(storage, docSnap.data().fullPath)
     deleteObject(deleteImageRef)
   }
-  let resultVacationRentalStatic = bnbStaticData.map(item => <VacationRentalStatic key={item.id} bnb={item} />)
   let resultVacationRental = contextData.bnbs.map(item => <VacationRental 
     key={item.id} 
     bnb={item} 
@@ -62,7 +61,7 @@ function Home() {
       {userEmail !== null && <Form />}
       {userEmail !== null && <h3>User logged in: {userEmail}</h3>}
       <div className={classes["grid-container"]}>
-        {userEmail === null ? resultVacationRentalStatic : resultVacationRental}
+        {resultVacationRental}
       </div>
       {contextData.isShoppingCartDisplayed && 
       <div className={classes.modal}>
