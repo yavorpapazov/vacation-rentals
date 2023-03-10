@@ -1,14 +1,14 @@
 import { useState, useEffect, createContext } from "react"
-import { db } from "../firebase/firebase-config"
-//import { onAuthStateChanged } from "firebase/auth"
-import { collection, onSnapshot } from "firebase/firestore"
+import { db, auth } from "../firebase/firebase-config"
+import { onAuthStateChanged } from "firebase/auth"
+import { collection, onSnapshot, query, where } from "firebase/firestore"
 
 let AppContext = createContext()
 function AppContextProvider({children}) {
   let [cart, setCart] = useState([])
   let [bnbs, setBnbs] = useState([])
   let [isShoppingCartDisplayed, setIsShoppingCartDisplayed] = useState(false)
-  //let [userId, setUserId] = useState(null)
+  let [userAddedToCartId, setUserAddedToCartId] = useState(null)
   function handleBnbs(result) {
     setBnbs(result)
   }
@@ -21,15 +21,15 @@ function AppContextProvider({children}) {
   function handleCloseCart() {
     setIsShoppingCartDisplayed(false)
   }
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, currentUser => {
-  //     if(currentUser) {
-  //       setUserId(currentUser.uid)
-  //     } else {
-  //       setUserId(null)
-  //     }
-  //   })
-  // }, [])
+  useEffect(() => {
+    onAuthStateChanged(auth, currentUser => {
+      if(currentUser) {
+        setUserAddedToCartId(currentUser.uid)
+      } else {
+        setUserAddedToCartId(null)
+      }
+    })
+  }, [])
   useEffect(() => {
     let bnbsCollectionRef = collection(db, "bnbs")
     let getBnbs = async () => {
@@ -46,15 +46,15 @@ function AppContextProvider({children}) {
   }, [])
   useEffect(() => {
     let cartCollectionRef = collection(db, "cart")
-    //let q = query(cartCollectionRef, where("userId", "==", userId))
+    let q = query(cartCollectionRef, where("addedToCartBy", "==", userAddedToCartId))
     let getCart = async () => {
-      onSnapshot(cartCollectionRef, snapshot => {
+      onSnapshot(q, snapshot => {
         let result = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}))
         setCart(result)
       })
     }
     getCart()
-  }, [])
+  }, [userAddedToCartId])
   let contextValue = {
     isShoppingCartDisplayed,
     handleBnbs,
