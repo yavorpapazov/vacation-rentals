@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react"
 import { AppContext } from "../state/context"
 import { useParams } from "react-router-dom"
 import { db, auth } from "../firebase/firebase-config"
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import { doc, getDoc, addDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { AiFillStar } from "react-icons/ai"
 import Button from "../ui/Button"
 import ShoppingCart from "./ShoppingCart"
@@ -15,13 +15,13 @@ function SingleBnb() {
   async function handleAddToCart(bnbId) {
     let addDocRef = doc(db, "bnbs", bnbId)
     let docSnap = await getDoc(addDocRef)
-    let addCartDocRef = doc(db, "cart", bnbId)
-    let addCartDocSnap = await getDoc(addCartDocRef)
-    if(addCartDocSnap.exists()) {
+    let q = query(collection(db, "cart"), where("addedToCartBy", "==", auth.currentUser.uid), where("bnbId", "==", bnbId))
+    let addCartDocSnap = await getDocs(q)
+    if(addCartDocSnap.docs[0]) {
       alert('The item is already in the cart.')
       return
     }
-    await setDoc(doc(db, "cart", bnbId), {...docSnap.data(), addedToCartBy: auth.currentUser.uid})
+    await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: auth.currentUser.uid, bnbId: bnbId})
   }
   useEffect(() => {
     let docRef = doc(db, "bnbs", params.id)

@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from "react"
 import { AppContext } from "../state/context"
 import { db, storage, auth } from "../firebase/firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
-import { doc, getDoc, addDoc, deleteDoc, collection } from "firebase/firestore"
+import { doc, getDoc, addDoc, deleteDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { ref, deleteObject } from "firebase/storage"
 import VacationRental from "../components/VacationRental"
 import ShoppingCart from "../components/ShoppingCart"
@@ -24,16 +24,13 @@ function Home() {
   async function handleAddToCart(bnbId) {
     let addDocRef = doc(db, "bnbs", bnbId)
     let docSnap = await getDoc(addDocRef)
-    let addCartDocRef = doc(db, "cart", bnbId)
-    let addCartDocSnap = await getDoc(addCartDocRef)
-    // let q = query(collection(db, "cart"), where("addedToCartBy", "==", auth.currentUser.uid))
-    // let addCartDocSnap = await getDoc(q)
-    if(addCartDocSnap.exists()) {
+    let q = query(collection(db, "cart"), where("addedToCartBy", "==", auth.currentUser.uid), where("bnbId", "==", bnbId))
+    let addCartDocSnap = await getDocs(q)
+    if(addCartDocSnap.docs[0]) {
       alert('The item is already in the cart.')
       return
     }
-    //await setDoc(doc(db, "cart", bnbId), {...docSnap.data(), addedToCartBy: auth.currentUser.uid})
-    await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: auth.currentUser.uid, bnbId})
+    await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: auth.currentUser.uid, bnbId: bnbId})
   }
   async function handleDelete(docId) {
     let addCartDocRef = doc(db, "cart", docId)
