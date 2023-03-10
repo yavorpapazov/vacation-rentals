@@ -2,7 +2,7 @@ import classes from "./SingleBnb.module.css"
 import { useEffect, useState, useContext } from "react"
 import { AppContext } from "../state/context"
 import { useParams } from "react-router-dom"
-import { db } from "../firebase/firebase-config"
+import { db, auth } from "../firebase/firebase-config"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { AiFillStar } from "react-icons/ai"
 import Button from "../ui/Button"
@@ -21,7 +21,7 @@ function SingleBnb() {
       alert('The item is already in the cart.')
       return
     }
-    await setDoc(doc(db, "cart", bnbId), docSnap.data())
+    await setDoc(doc(db, "cart", bnbId), {...docSnap.data(), addedToCartBy: auth.currentUser.uid})
   }
   useEffect(() => {
     let docRef = doc(db, "bnbs", params.id)
