@@ -33,17 +33,22 @@ function Home() {
     await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: auth.currentUser.uid, bnbId: bnbId})
   }
   async function handleDelete(docId) {
-    let addCartDocRef = doc(db, "cart", docId)
-    let addCartDocSnap = await getDoc(addCartDocRef)
-    if(addCartDocSnap.exists()) {
+    let q = query(collection(db, "cart"), where("addedToCartBy", "==", auth.currentUser.uid), where("bnbId", "==", docId))
+    let addCartDocSnap = await getDocs(q)
+    if(addCartDocSnap.docs[0]) {
       alert('Please remove item from shopping cart.')
       return
     }
     let deleteDocRef = doc(db, "bnbs", docId)
     let docSnap = await getDoc(deleteDocRef)
-    await deleteDoc(deleteDocRef)
-    let deleteImageRef = ref(storage, docSnap.data().fullPath)
-    deleteObject(deleteImageRef)
+    if(auth.currentUser.uid === docSnap.data().userId) {
+      await deleteDoc(deleteDocRef)
+      let deleteImageRef = ref(storage, docSnap.data().fullPath)
+      deleteObject(deleteImageRef)
+    } else {
+      alert('The item has been created by a different user and can not be deleted.')
+      return
+    }
   }
   let resultVacationRental = contextData.bnbs.map(item => <VacationRental 
     key={item.id} 
