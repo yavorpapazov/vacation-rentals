@@ -19,18 +19,20 @@ function Login() {
     e.preventDefault()
     try {
       await signInWithEmailAndPassword(auth, email, password)
+      setEmail('')
+      setPassword('')
+      navigate("/")
     } catch(err) {
-      console.log(err.message)
+      alert(err.message)
+      setEmail('')
+      setPassword('')
     }
-    setEmail('')
-    setPassword('')
-    navigate("/")
   }
   async function handleSigninWithGoogle() {
     try {
       await signInWithPopup(auth, googleProvider)
     } catch(err) {
-      console.log(err.message)
+      alert(err.message)
     }
     navigate("/")
   }

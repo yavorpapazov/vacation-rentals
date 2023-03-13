@@ -19,12 +19,14 @@ function Register() {
     e.preventDefault()
     try {
       await createUserWithEmailAndPassword(auth, registerEmail, registerPassword)
+      setRegisterEmail('')
+      setRegisterPassword('')
+      navigate("/")
     } catch(err) {
-      console.log(err.message)
+      alert(err.message)
+      setRegisterEmail('')
+      setRegisterPassword('')
     }
-    setRegisterEmail('')
-    setRegisterPassword('')
-    navigate("/")
   }
   return (
     <div className={classes.register}>

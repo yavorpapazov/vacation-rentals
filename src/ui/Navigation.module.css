@@ -13,10 +13,24 @@
     align-items: center;
     gap: 50px;
 }
+.shopping-cart-log-in {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
 .shopping-cart {
+    border: 3px solid blue;
     display: flex;
     flex-direction: column;
 }
 .shopping-cart-h3 {
     text-align: center;
+}
+@media (max-width: 800px) {
+    .navbar {
+        flex-direction: column;
+    }
+    .auth-cart {
+        flex-direction: column;
+    }
 }

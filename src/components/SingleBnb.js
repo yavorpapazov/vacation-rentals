@@ -2,6 +2,7 @@ import classes from "./SingleBnb.module.css"
 import { useEffect, useState, useContext } from "react"
 import { AppContext } from "../state/context"
 import { useParams } from "react-router-dom"
+import { onAuthStateChanged } from "firebase/auth"
 import { db, auth } from "../firebase/firebase-config"
 import { doc, getDoc, addDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { AiFillStar } from "react-icons/ai"
@@ -11,17 +12,31 @@ import ShoppingCart from "./ShoppingCart"
 function SingleBnb() {
   let params = useParams()
   let [singleBnb, setSingleBnb] = useState({})
+  let [userId, setUserId] = useState(null)
   let contextData = useContext(AppContext)
+  useEffect(() => {
+    onAuthStateChanged(auth, currentUser => {
+      if(currentUser) {
+        setUserId(currentUser.uid)
+      } else {
+        setUserId(null)
+      }
+    })
+  }, [])
   async function handleAddToCart(bnbId) {
     let addDocRef = doc(db, "bnbs", bnbId)
     let docSnap = await getDoc(addDocRef)
-    let q = query(collection(db, "cart"), where("addedToCartBy", "==", auth.currentUser.uid), where("bnbId", "==", bnbId))
+    let q = query(collection(db, "cart"), where("addedToCartBy", "==", userId), where("bnbId", "==", bnbId))
     let addCartDocSnap = await getDocs(q)
     if(addCartDocSnap.docs[0]) {
       alert('The item is already in the cart.')
       return
     }
-    await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: auth.currentUser.uid, bnbId: bnbId})
+    if(userId === null) {
+      alert('Please log in to add or delete vacation rentals.')
+      return
+    }
+    await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: userId, bnbId: bnbId})
   }
   useEffect(() => {
     let docRef = doc(db, "bnbs", params.id)

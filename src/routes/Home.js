@@ -12,28 +12,35 @@ import Form from "../components/Form"
 function Home() {
   let contextData = useContext(AppContext)
   let [userEmail, setUserEmail] = useState(null)
+  let [userId, setUserId] = useState(null)
   useEffect(() => {
     onAuthStateChanged(auth, currentUser => {
       if(currentUser) {
         setUserEmail(currentUser.email)
+        setUserId(currentUser.uid)
       } else {
         setUserEmail(null)
+        setUserId(null)
       }
     })
   }, [])
   async function handleAddToCart(bnbId) {
     let addDocRef = doc(db, "bnbs", bnbId)
     let docSnap = await getDoc(addDocRef)
-    let q = query(collection(db, "cart"), where("addedToCartBy", "==", auth.currentUser.uid), where("bnbId", "==", bnbId))
+    let q = query(collection(db, "cart"), where("addedToCartBy", "==", userId), where("bnbId", "==", bnbId))
     let addCartDocSnap = await getDocs(q)
     if(addCartDocSnap.docs[0]) {
       alert('The item is already in the cart.')
       return
     }
-    await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: auth.currentUser.uid, bnbId: bnbId})
+    if(userId === null) {
+      alert('Please log in to add or delete vacation rentals.')
+      return
+    }
+    await addDoc(collection(db, "cart"), {...docSnap.data(), addedToCartBy: userId, bnbId: bnbId})
   }
   async function handleDelete(docId) {
-    let q = query(collection(db, "cart"), where("addedToCartBy", "==", auth.currentUser.uid), where("bnbId", "==", docId))
+    let q = query(collection(db, "cart"), where("addedToCartBy", "==", userId), where("bnbId", "==", docId))
     let addCartDocSnap = await getDocs(q)
     if(addCartDocSnap.docs[0]) {
       alert('Please remove item from shopping cart.')
@@ -41,13 +48,15 @@ function Home() {
     }
     let deleteDocRef = doc(db, "bnbs", docId)
     let docSnap = await getDoc(deleteDocRef)
-    if(auth.currentUser.uid === docSnap.data().userId) {
+    if(userId === docSnap.data().userId) {
       await deleteDoc(deleteDocRef)
       let deleteImageRef = ref(storage, docSnap.data().fullPath)
       deleteObject(deleteImageRef)
-    } else {
+    } else if(userId !== docSnap.data().userId && userId !== null) {
       alert('The item has been created by a different user and can not be deleted.')
       return
+    } else if(userId === null) {
+      alert('Please log in to add or delete vacation rentals.')
     }
   }
   let resultVacationRental = contextData.bnbs.map(item => <VacationRental 

@@ -36,21 +36,23 @@ function Navigation() {
           <LinkButton to="/">Home</LinkButton>
         </div>
         <div className={classes["auth-cart"]}>
-          {userId === null && <div>
-            <LinkButton addClass="border" to="/login">Log In</LinkButton>
-          </div>}
+          <div className={classes["shopping-cart-log-in"]}>
+            <div className={classes["shopping-cart"]}>
+              <h3 className={classes["shopping-cart-h3"]}>{userId === null ? 0 : contextData.cart.length}</h3>
+              <div onClick={() => contextData.handleDisplayCart()}>
+                <AiOutlineShoppingCart size="2em" />
+              </div>
+            </div>
+            {userId === null && <div>
+              <LinkButton addClass="border" to="/login">Log In</LinkButton>
+            </div>}
+            {userId !== null && <div>
+              <Button addClass="btn" onClick={handleLogout}>Log out</Button>
+            </div>}
+          </div>
           {userId === null && <div>
             <LinkButton addClass="border" to="/register">Register</LinkButton>
           </div>}
-          {userId !== null && <div>
-            <Button addClass="btn" onClick={handleLogout}>Log out</Button>
-          </div>}
-          <div className={classes["shopping-cart"]}>
-            <h3 className={classes["shopping-cart-h3"]}>{userId === null ? 0 : contextData.cart.length}</h3>
-            <div onClick={() => contextData.handleDisplayCart()}>
-              <AiOutlineShoppingCart size="2em" />
-            </div>
-          </div>
         </div>
       </nav>
     </header>
