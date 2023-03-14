@@ -38,7 +38,7 @@ function Login() {
   }
   return (
     <div className={classes.login}>
-      <form onSubmit={handleLogin}>
+      <form className={classes["login-form"]} onSubmit={handleLogin}>
         <div className={classes["form-item"]}>
           <label htmlFor="email">Email:</label>
           <br />
@@ -49,9 +49,13 @@ function Login() {
           <br />
           <input id="password" type="password" value={password} onChange={handlePassword} required></input>
         </div>
-        <Button addClass="button">Log in</Button>
+        <div>
+          <Button addClass="button">Log in</Button>
+        </div>
       </form>
-      <Button addClass="button" onClick={handleSigninWithGoogle}>Google</Button>
+      <div>
+        <Button addClass="button" onClick={handleSigninWithGoogle}>Google</Button>
+      </div>
     </div>
   )
 }

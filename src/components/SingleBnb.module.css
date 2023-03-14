@@ -1,5 +1,5 @@
 .container {
-    margin: 0 auto;
+    margin: 0 auto 30px;
     width: 300px;
     display: flex;
     flex-direction: column;
