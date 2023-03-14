@@ -19,18 +19,22 @@
     gap: 50px;
 }
 .shopping-cart {
-    border: 3px solid blue;
     display: flex;
     flex-direction: column;
 }
 .shopping-cart-h3 {
     text-align: center;
 }
-@media (max-width: 800px) {
+@media (max-width: 700px) {
     .navbar {
         flex-direction: column;
+        gap: 50px;
+        padding: 30px 0;
     }
     .auth-cart {
         flex-direction: column;
+    }
+    .shopping-cart-log-in {
+        gap: 20px;
     }
 }
