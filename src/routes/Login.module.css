@@ -1,6 +1,6 @@
 .login {
     width: 300px;
-    height: 400px;
+    height: 350px;
     border: 3px solid maroon;
     border-radius: 5px;
     box-shadow: 2px 2px 5px maroon;
@@ -11,22 +11,16 @@
     align-items: center;
     margin: 0 auto 30px;
 }
-.login > div {
-    border: 3px solid blue;
-}
 .login-form {
-    border: 3px solid red;
     height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
 }
-.form-item {
-    border: 3px solid green;
-}
 .form-item input {
     border-radius: 5px;
-    width: 100%;
+    width: 200px;
     height: 30px;
+    margin-top: 5px;
 }

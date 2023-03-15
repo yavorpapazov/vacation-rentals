@@ -54,7 +54,7 @@ function Login() {
         </div>
       </form>
       <div>
-        <Button addClass="button" onClick={handleSigninWithGoogle}>Google</Button>
+        <Button addClass="google" onClick={handleSigninWithGoogle}>Sign In With Google</Button>
       </div>
     </div>
   )

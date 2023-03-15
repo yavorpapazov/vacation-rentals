@@ -37,9 +37,9 @@ function Navigation() {
         </div>
         <div className={classes["auth-cart"]}>
           <div className={classes["shopping-cart-log-in"]}>
-            <div className={classes["shopping-cart"]}>
+            <div className={classes["shopping-cart"]} onClick={() => contextData.handleDisplayCart()}>
               <h3 className={classes["shopping-cart-h3"]}>{userId === null ? 0 : contextData.cart.length}</h3>
-              <div onClick={() => contextData.handleDisplayCart()}>
+              <div>
                 <AiOutlineShoppingCart size="2em" />
               </div>
             </div>

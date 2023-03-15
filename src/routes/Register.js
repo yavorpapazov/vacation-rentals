@@ -30,7 +30,7 @@ function Register() {
   }
   return (
     <div className={classes.register}>
-      <form onSubmit={handleRegister}>
+      <form className={classes["register-form"]} onSubmit={handleRegister}>
         <div className={classes["form-item"]}>
           <label htmlFor="registeremail">Email:</label>
           <br />
@@ -41,7 +41,9 @@ function Register() {
           <br />
           <input id="registerpassword" type="password" value={registerPassword} onChange={handleRegisterPassword} required></input>
         </div>
-        <Button addClass="button">Sign up</Button>
+        <div>
+          <Button addClass="button">Sign up</Button>
+        </div>
       </form>
     </div>
   )

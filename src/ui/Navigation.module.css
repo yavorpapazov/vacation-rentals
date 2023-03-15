@@ -21,6 +21,7 @@
 .shopping-cart {
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 .shopping-cart-h3 {
     text-align: center;

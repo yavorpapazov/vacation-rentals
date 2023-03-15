@@ -33,3 +33,15 @@
 .btn:hover {
     background-color: darkgray;
 }
+.google {
+    border-radius: 5px;
+    color: blue;
+    width: 200px;
+    height: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.google:hover {
+    background-color: darkgray;
+    color: whitesmoke;
+}
